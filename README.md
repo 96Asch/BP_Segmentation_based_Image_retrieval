@@ -1,0 +1,1 @@
+Bachelor Project of Andrew Huang. Researching the possible positive effects of Image segmentation on Image retrieval systems
