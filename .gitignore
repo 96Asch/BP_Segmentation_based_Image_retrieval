@@ -1,3 +1,7 @@
 /datasets
 .git
 /.ipynb_checkpoints
+/segmentation_model
+/features
+/models
+Pipfile*
