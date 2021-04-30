@@ -5,3 +5,5 @@
 /features
 /models
 Pipfile*
+/utils/__pycache__
+/utils/.ipynb*
