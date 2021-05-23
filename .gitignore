@@ -1,3 +1,9 @@
 /datasets
 .git
 /.ipynb_checkpoints
+/segmentation_model
+/features
+/models
+Pipfile*
+/utils/__pycache__
+/utils/.ipynb*
