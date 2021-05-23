@@ -1,6 +1,7 @@
 import h5py
 import glob
 import os.path
+import numpy as np
 from os import path
 
 
@@ -25,3 +26,10 @@ class Database:
         dataset = db[column][:].copy()
         db.close()
         return dataset
+    
+    def read_sift(self):
+        ids = self.read("id")
+        sift_descriptors = []
+        with h5py.File(self.hdf5_path, mode="r") as db:
+            sift_descriptors = [self.read("{}_{}".format(i, "sift")) for i in ids]
+        return np.array(sift_descriptors, dtype=object)

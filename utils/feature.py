@@ -43,18 +43,20 @@ class Feature:
     def process(self, payload):
         print("[INFO] starting process {}".format(payload["id"]))
         features = {}
-        for image_path in payload["input_paths"]:
+        for index, image_path in enumerate(payload["input_paths"]):
             image = cv2.imread(image_path)
             features[image_path] = self.get_feature(image)
+            if (index % 10) == 0 and index != 0:
+                print("Process {}: completed {} of {}".format(payload["id"], index, len(payload["input_paths"])))
 
         print("[INFO] process {} serializing features".format(payload["id"]))
         f = open(payload["output_path"], "wb")
         f.write(pickle.dumps(features))
         f.close()
     
-    def dump(self, image_paths):
+    def dump(self, image_paths, overwrite=False):
         with h5py.File(self.hdf5_path, mode='r+') as db:
-            if self.name in db.keys():
+            if (self.name in db.keys()) and (overwrite == False):
                 print("Dataset {} already exists in {}".format(self.name, self.hdf5_path))
                 return
             

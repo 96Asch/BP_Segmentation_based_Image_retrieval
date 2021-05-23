@@ -13,9 +13,13 @@ class LocalBinaryPatterns(Feature):
         self.radius = radius
         self.eps = eps
 
-    def describe(self, image):
+    def describe(self, image, masked=False):
+        msk = np.ones((image.shape[0], image.shape[1])).astype(np.bool)
+        if masked:
+            msk = (image > 0)
+        
         lbp = feature.local_binary_pattern(image, self.num_points, self.radius, method="uniform")
-        (hist, bins) = np.histogram(lbp.ravel(), 
+        (hist, bins) = np.histogram(lbp[msk].ravel(), 
                                  bins=(self.num_points + 2), 
                                  range=(0, self.num_points + 2))
         hist = hist.astype("float")

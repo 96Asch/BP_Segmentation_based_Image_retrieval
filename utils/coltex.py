@@ -36,14 +36,17 @@ class Coltex(Feature):
             for j in range(hsv_image.shape[1]):
 
                 hue_main, sat_main, int_main = hsv_image[i][j][0], hsv_image[i][j][1], hsv_image[i][j][2]
-                if (i + 1 >= hsv_image.shape[0]) or j + 1 >= hsv_image.shape[1]:
-                    hue_diag, sat_diag, int_diag = 0, 0, 0
-                    hue_vert, sat_vert, int_vert = 0, 0, 0
-                    hue_hori, sat_hori, int_hori = 0, 0, 0
-                else:                
-                    hue_diag, sat_diag, int_diag = hsv_image[i + 1][j + 1][0], hsv_image[i + 1][j + 1][1], hsv_image[i + 1][j + 1][2]
-                    hue_vert, sat_vert, int_vert = hsv_image[i][j + 1][0], hsv_image[i][j + 1][1], hsv_image[i][j + 1][2]
-                    hue_hori, sat_hori, int_hori = hsv_image[i + 1][j][0], hsv_image[i + 1][j][1], hsv_image[i + 1][j][2]
+                hue_diag, sat_diag, int_diag = 0, 0, 0
+                hue_vert, sat_vert, int_vert = 0, 0, 0
+                hue_hori, sat_hori, int_hori = 0, 0, 0
+                
+                if (i + 1) < hsv_image.shape[0] and (j + 1) < hsv_image.shape[1]:
+                    hue_diag, sat_diag, int_diag = hsv_image[i+1][j+1][0], hsv_image[i+1][j+1][1], hsv_image[i+1][j+1][2]
+                elif (i + 1) < hsv_image.shape[0]:
+                    hue_vert, sat_vert, int_vert = hsv_image[i+1][j][0], hsv_image[i+1][j][1], hsv_image[i+1][j][2]
+                elif (j + 1) < hsv_image.shape[1]:
+                    hue_hori, sat_hori, int_hori = hsv_image[i][j+1][0], hsv_image[i][j+1][1], hsv_image[i][j+1][2]
+                    
 
                 wh_main, wi_main = self.calculate_weight_hue(sat_main, int_main), self.calculate_weight_int(sat_main, int_main)
                 wh_diag, wi_diag = self.calculate_weight_hue(sat_diag, int_diag), self.calculate_weight_int(sat_diag, int_diag)
@@ -63,18 +66,18 @@ class Coltex(Feature):
                 qhQh = math.ceil(hue_vert / self.quantization_hue)
                 nqiQi = math.ceil(n1 + (int_vert / self.quantization_int))
 
-                VERT[phQh][qhQh] += wh_main + wh_diag
-                VERT[phQh][nqiQi] +=  wh_main + wi_diag
-                VERT[npiQi][qhQh] += wi_main + wh_diag
-                VERT[npiQi][nqiQi] += wi_main + wh_diag
+                VERT[phQh][qhQh] += wh_main + wh_vert
+                VERT[phQh][nqiQi] +=  wh_main + wi_vert
+                VERT[npiQi][qhQh] += wi_main + wh_vert
+                VERT[npiQi][nqiQi] += wi_main + wh_vert
 
                 qhQh = math.ceil(hue_hori / self.quantization_hue)
                 nqiQi = math.ceil(n1 + (int_hori / self.quantization_int))
 
-                HORI[phQh][qhQh] += wh_main + wh_diag
-                HORI[phQh][nqiQi] +=  wh_main + wi_diag
-                HORI[npiQi][qhQh] += wi_main + wh_diag
-                HORI[npiQi][nqiQi] += wi_main + wh_diag
+                HORI[phQh][qhQh] += wh_main + wh_hori
+                HORI[phQh][nqiQi] +=  wh_main + wi_hori
+                HORI[npiQi][qhQh] += wi_main + wh_hori
+                HORI[npiQi][nqiQi] += wi_main + wh_hori
                 
         return np.concatenate((DIAG.ravel(), VERT.ravel(), HORI.ravel()))
     
