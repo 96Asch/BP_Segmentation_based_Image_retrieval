@@ -116,17 +116,10 @@ def visualize_table(headers, vals):
                    fill_color='lightcyan',
                    align='center'))
     ])
-
-    fig.update_layout(height=300)
     fig.show()
     
 def visualize_PR_curve(pr_curves, query_names, title):
     plt.rcParams["figure.figsize"] = (20,10)
-    
-
-    axes = plt.gca()
-    axes.set_xlim([0,1.0])
-    axes.set_ylim([0,1.0])
 
     plt.title(title)
     plt.xlabel("Recall")

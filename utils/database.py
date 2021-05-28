@@ -23,13 +23,16 @@ class Database:
 
     def read(self, column):
         db = h5py.File(self.hdf5_path, mode="r")
-        dataset = db[column][:].copy()
+        dataset = db[column][:]
         db.close()
         return dataset
     
-    def read_sift(self):
+    def read_sift(self, path=''):
         ids = self.read("id")
         sift_descriptors = []
         with h5py.File(self.hdf5_path, mode="r") as db:
-            sift_descriptors = [self.read("{}_{}".format(i, "sift")) for i in ids]
+            if path:
+                sift_descriptors = db["{}_{}".format(path, "sift")][:]
+            else:
+                sift_descriptors = [db["{}_{}".format(i, "sift")][:] for i in ids]
         return np.array(sift_descriptors, dtype=object)

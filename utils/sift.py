@@ -22,7 +22,7 @@ class Sift(Feature):
         features = {}
         sift = cv2.SIFT_create(nOctaveLayers=self.num_octaves)
         for index, image_path in enumerate(payload["input_paths"]):
-            image = cv2.imread(image_path)
+            image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
             keypoints, descriptor = sift.detectAndCompute(image, None)
             features[image_path] = descriptor
                 

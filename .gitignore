@@ -7,3 +7,5 @@
 Pipfile*
 /utils/__pycache__
 /utils/.ipynb*
+/temp
+/results
